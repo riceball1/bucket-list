@@ -1,9 +1,10 @@
 const path = require('path');
-const webpack = require('webpack');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: "./index.js",
+    entry: "./src/index.tsx",
+    devtool: "source-map",
+    mode: "development",
     output: {
         filename: "bundle.js",
         path: path.resolve("dist"),
@@ -28,11 +29,26 @@ module.exports = {
                     "sass-loader"
                 ],
             },
+            {
+                test: /\.(ts|tsx)?$/,
+                loader: "ts-loader",
+                exclude: /node_modules/
+            },
         ]
+    },
+    resolve: {
+        extensions: ['.ts', '.js', '.json', ".tsx"]
     },
     plugins: [
         new HTMLWebpackPlugin({
-            template: "index.html"
+            template: "public/index.html",
+            hash: true, // Cache busting
+            filename: "../dist/index.html"
         }),
-    ]
+    ],
+    devServer: {
+        port: 3000,
+        open: true,
+        hot: true,
+    },
 }
